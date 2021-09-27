@@ -44,8 +44,8 @@ router.get('/tasks', auth, async (req,res) => {
             path:'tasks',
             match,
             options:{
-                limit: parseInt(req.query.limit),
-                skip: parseInt(req.query.skip),
+                limit: parseInt(req.query.limit)  || 10,
+                skip: parseInt(req.query.skip) || 0,
                 sort
             }
         })
