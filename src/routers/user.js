@@ -1,6 +1,6 @@
 const express = require('express')
 const multer = require('multer')     // This library used for Uploading the files
-const sharp = require('sharp')
+const sharp = require('sharp')       // This library used for convert large images into common formats
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const { sendWelcomeEmail, sendCancelationEmail } = require('../emails/account')
@@ -14,13 +14,13 @@ router.post('/users', async (req, res) => {
         await user.save()
         sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
-        res.status(201).send({ user })
+        res.status(201).send({ user })      // Hide the data using toJSON method
     } catch (e) {
         res.status(400).send(e)
     }
 })
 
-// Creating User logging
+// Creating User logging Endpoint
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
@@ -37,7 +37,7 @@ const upload = multer({
     limits: {
         fileSize: 1000000
     },
-    fileFilter(req, file, cb) {
+    fileFilter(req, file, cb) {     // cb is a callback function
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
             cb(new Error('please upload an image!'))
         }
@@ -99,7 +99,6 @@ router.post('/users/logout', auth, async (req, res) => {
 router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = []
-
 
         await req.user.save()
         res.send()

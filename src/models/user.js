@@ -86,7 +86,7 @@ userSchema.methods.toJSON = function(){
 
 userSchema.methods.generateAuthToken = async function(){
     const user = this
-    const token = jwt.sign({ _id:user._id.toString() }, 'process.env.JWT_SECRET')
+    const token = jwt.sign({ _id:user._id.toString() }, process.env.JWT_SECRET)
 
     user.tokens =  user.tokens.concat({ token : token })
     await user.save()
@@ -110,7 +110,7 @@ userSchema.statics.findByCredentials = async (email,password) => {
     return user
 }
  
-// Using the Schema we can do somethis with the schema like Before event Or After Event
+// Using the Schema we can do something with the schema like Before event Or After Event
 // hash the plaintext password befor saving
 userSchema.pre('save',async function(next){
     const user = this
