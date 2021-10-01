@@ -14,7 +14,7 @@ router.post('/users', async (req, res) => {
         await user.save()
         sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
-        res.status(201).send({ user })      // Hide the data using toJSON method
+        res.status(201).send({ user, token })      // Hide the data using toJSON method
     } catch (e) {
         res.status(400).send(e)
     }
@@ -57,7 +57,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
 
 // Delete Avatar
 // Creating Endpoint for avatar Deleting using multer
-router.delete('/users/me/avatar', auth, async (req, res) => {
+router.delete('/users/me/av  atar', auth, async (req, res) => {
     req.user.avatar = undefined
     await req.user.save()
     res.send()
@@ -107,11 +107,13 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     }
 })
 
+// Read profile
 // Creating Endpoint for fetching the user (using async await)
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
 })
 
+// Update user
 // Creating endpoint for update the user (using async await)
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body)
